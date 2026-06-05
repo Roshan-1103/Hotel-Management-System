@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+body
+{
+background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKhc0TwC7xMVehvAa9rvHRL_fUPnS2J_dVCg&s");
+background-repeat:no-repeat;
+background-size: cover;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:0;
+}
+form
+{
+display:flex;
+flex-direction:column;
+gap:20px;
+padding:40px;
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(5px);
+border-radius:15px;
+text-align:center;
+width:400px;
+}
+input
+{
+padding:10px;
+border-radius:8px;
+border:none;
+}
+
+input[type="submit"]
+{
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<form action="P2" method="post">
+<label>Enter Customer Id: <input type="text" name="cid"><br></br></label>
+<label>Enter Checkout Date: <input type="date" name="cdate"><br></br></label>
+<input type="hidden" name="action" value="fetch"><br></br>
+<input type="submit" value="checkout"><br></br>
+<a href='index.html'> back</a>
+</form>
+</body>
+</html>
