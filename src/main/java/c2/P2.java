@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class P2
@@ -42,6 +43,14 @@ public class P2 extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		HttpSession session=request.getSession(false);
+
+		if(session==null ||
+		session.getAttribute("admin")==null)
+		{
+		    response.sendRedirect("admin.html");
+		    return;
+		}
 		response.setContentType("text/html");
 		PrintWriter pw=response.getWriter();
 		pw.println("<html>");

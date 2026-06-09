@@ -1,10 +1,11 @@
-package p1;
+package p4;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,16 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class C1
+ * Servlet implementation class Admin
  */
-@WebServlet("/C1")
-public class C1 extends HttpServlet {
+@WebServlet("/Admin")
+public class Admin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+       
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public C1() {
+    public Admin() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -32,7 +34,7 @@ public class C1 extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -41,42 +43,35 @@ public class C1 extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
-		HttpSession session=request.getSession(false);
-
-		if(session==null ||
-		session.getAttribute("admin")==null)
-		{
-		    response.sendRedirect("admin.html");
-		    return;
-		}
+		response.setContentType("text/html");
 		PrintWriter pw=response.getWriter();
-		int s1=Integer.parseInt(request.getParameter("cid"));
-		String s2=request.getParameter("cname");
-		long s3=Long.parseLong(request.getParameter("cmob"));
-		String s4=request.getParameter("checkin");
-		int s5=Integer.parseInt(request.getParameter("days"));
+		String username=request.getParameter("username");
+		String Pwd=request.getParameter("Pwd");
 		try
 		{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_management","root","Srinu@12345");
-			PreparedStatement ps=con.prepareStatement("insert into hotel(cid,cname,cmobile,checkin_date,days) values(?,?,?,?,?)");
-			ps.setInt(1, s1);
-			ps.setString(2, s2);
-			ps.setLong(3, s3);
-			java.sql.Date sdate= java.sql.Date.valueOf(s4);
-			ps.setDate(4, sdate);
-			ps.setInt(5, s5);
-			
-			ps.executeUpdate();
-			pw.println("<h2>values successfully inserted</h2><br></br>");
+			PreparedStatement ps=con.prepareStatement("select * from adm where username=? and Pwd=?");
+			ps.setString(1, username);
+			ps.setString(2,Pwd);
+			System.out.println("Username = "+username);
+			System.out.println("Pwd= "+Pwd);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next())
+			{
+				HttpSession session=request.getSession();
+				session.setAttribute("admin",username);
+				response.sendRedirect("book.html");
+			}
+			else
+			{
+				pw.println("<h3> Invalid Username or Password</h3>");
+			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		response.setContentType("text/html");
-		pw.println("<a href='index.html'>back</a><br></br>");
-	 
 	}
 
 }
